@@ -12,6 +12,11 @@
 				height: 10px;
 			}
 		}
+		&.expanded {
+			svg {
+				transform: rotate(180deg);
+			}
+		}
 	}
 	&.checkbox > label {
 		input[type='checkbox'] {

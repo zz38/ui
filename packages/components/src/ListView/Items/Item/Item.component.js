@@ -43,7 +43,7 @@ function Item(props) {
 						</span>
 					</label>
 					{ props.children && (
-						<div className="checkbox-nested-expand">
+						<div className={classNames('checkbox-nested-expand', { expanded: item.expanded })}>
 							<Button
 								bsStyle="link"
 								onClick={event => item.onExpandToggle(event, item)}
