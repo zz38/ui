@@ -90,7 +90,7 @@ const withNestedItems = {
 			value: 'IpsumParent',
 			onChange: action('onChange'),
 			onExpandToggle: action('onExpandToggle'),
-			expanded: false,
+			expanded: true,
 			children: [
 				{
 					label: 'Lorem2',

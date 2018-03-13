@@ -104,8 +104,11 @@ class Items extends React.PureComponent {
 	}
 
 	renderItem(item, index) {
-		const computedIndex = this.hasToggleAll ? index + 1 : index;
-		const computedId = `${this.props.id}-${computedIndex}-item`;
+		let computedId;
+		if (this.props.id) {
+			const computedIndex = this.hasToggleAll ? index + 1 : index;
+			computedId = `${this.props.id}-${computedIndex}-item`;
+		}
 
 		return (
 			<Item
@@ -117,8 +120,7 @@ class Items extends React.PureComponent {
 			>
 				{ item.children && item.children.map((nestedItem, index) => (
 					<Item
-						key={`${computedId}_${index}`}
-						id={`${computedId}_${index}`}
+						key={index}
 						item={nestedItem}
 						parentItem={item}
 						searchCriteria={this.props.searchCriteria}
