@@ -27,7 +27,8 @@ export default {
 	CMF_PROPS: [
 		'didMountActionCreator', // componentDidMount action creator id in registry
 		'keepComponentState', // redux state management on unmount
-		'view', // view component id in registry
+		'componentId',
+		'view', // deprecated
 		'saga',
 		'willUnMountActionCreator', // componentWillUnmount action creator id in registry
 		'initialState',
@@ -37,7 +38,6 @@ export default {
 		'setState',
 		'deleteState',
 		'updateState',
-		'componentId',
 		'state',
 		'initState',
 		'getCollection',

@@ -52,14 +52,19 @@ export function getComponentName(WrappedComponent) {
 }
 
 export function getComponentId(componentId, props) {
+	let id;
 	if (typeof componentId === 'function') {
-		return componentId(props) || 'default';
-	} else if (typeof componentId === 'string') {
-		return componentId;
-	} else if (props.componentId) {
-		return props.componentId;
+		id = componentId(props);
+	} else if (typeof componentId === 'string' && componentId) {
+		id = componentId;
 	}
-	return 'default';
+	if (props.componentId) {
+		id = props.componentId;
+	}
+	if (!id) {
+		id = 'default';
+	}
+	return id;
 }
 
 function oldGetCollection(id) {
@@ -211,6 +216,9 @@ export default function cmfConnect({
 	mergeProps,
 	...rest
 }) {
+	if (componentId) {
+		console.warn('DEPRECATED: this behavior is deprecated. It will be removed in the next release');
+	}
 	return function wrapWithCMF(WrappedComponent) {
 		if (!WrappedComponent.displayName) {
 			invariant(true, `${WrappedComponent.name} has no displayName`);
@@ -249,6 +257,9 @@ export default function cmfConnect({
 				}
 				return (_, getReduxState) =>
 					getSetStateAction(state(getState(getReduxState(), id)), id, type);
+			};
+			static defaultProps = {
+				componentId: 'default',
 			};
 
 			constructor(props, context) {
