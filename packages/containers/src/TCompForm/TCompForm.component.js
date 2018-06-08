@@ -25,11 +25,12 @@ class TCompForm extends React.Component {
 		super(props);
 		this.state = {};
 		this.onTrigger = this.onTrigger.bind(this);
+		this.onChange = this.onChange.bind(this);
 		this.getUISpec = this.getUISpec.bind(this);
-		// this.trigger = kit.createTriggers({
-		// 	url: this.props.triggerURL,
-		// 	customRegistry: this.props.customTriggers(this),
-		// });
+		this.trigger = kit.createTriggers({
+			url: this.props.triggerURL,
+			customRegistry: this.props.customTriggers(this),
+		});
 	}
 
 	onChange(event, data) {
@@ -44,11 +45,12 @@ class TCompForm extends React.Component {
 				source: event,
 			},
 			data,
-			uiSpec: this.uiSpec(),
+			uiSpec: this.getUISpec(),
 		});
 	}
 
 	onTrigger(event, payload) {
+		console.log('onTrigger');
 		this.trigger(event, payload).then(data => {
 			if (data.properties) {
 				this.setState({ properties: data.properties });
@@ -58,21 +60,25 @@ class TCompForm extends React.Component {
 				event: {
 					type: 'onTrigger',
 					component: 'TCompForm',
+					componentId: this.props.componentId,
 					props: this.props,
 					state: this.state,
 				},
 				data,
-				uiSpec: this.uiSpec(),
+				uiSpec: this.getUISpec(),
 			});
 		});
 	}
 
 	getUISpec() {
-		return {
-			jsonSchema: this.props.state.get('jsonSchema', new Map()).toJS(),
-			uiSchema: this.props.state.get('uiSchema', new Map()).toJS(),
-			properties: this.state.properties,
-		};
+		const spec = { properties: this.state.properties };
+		let immutableSpec = this.props.state;
+		if (this.props.uiSpecPath) {
+			immutableSpec = immutableSpec.getIn(this.props.uiSpecPath.split('.'), new Map());
+		}
+		spec.jsonSchema = immutableSpec.get('jsonSchema', new Map()).toJS();
+		spec.uiSchema = immutableSpec.get('uiSchema', new Map()).toJS();
+		return spec;
 	}
 
 	render() {
@@ -82,6 +88,7 @@ class TCompForm extends React.Component {
 			this.getUISpec(),
 			{
 				onTrigger: this.onTrigger,
+				onChange: this.onChange,
 			},
 		);
 		if (!props.jsonSchema) {

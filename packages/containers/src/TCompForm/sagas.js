@@ -11,16 +11,16 @@ function* fecthDefinition(url, componentId) {
 	yield put(Component.setStateAction(data, componentId));
 }
 
-function* onDidMount({ componentId, definitionURL }) {
-	const hasCollection = yield select(state => state.cmf.collections.has(collectionId));
-	if (!hasCollection) {
-		yield fecthDefinition(definitionURL, 'demo');
+function* onDidMount({ componentId = 'demo', definitionURL }) {
+	const state = yield select();
+	if (!Component.getState(state, componentId).get('jsonSchema')) {
+		yield fecthDefinition(definitionURL, componentId);
 	}
 }
 
 function* onTrigger(action) {
 	if (action.jsonSchema || action.uiSchema) {
-
+		yield put(Component.setStateAction(action, action.event.componentId));
 	}
 }
 

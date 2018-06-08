@@ -25,11 +25,15 @@ class URLWrapper extends React.Component {
 	onDefinitionChange(event) {
 		this.setState({ definitionURL: event.target.value });
 	}
+	onTriggerChange(event) {
+		this.setState({ definitionURL: event.target.value });
+	}
 	render() {
 		return (
 			<div className="container">
 				<div className="col-md-6">
-					<input onChange={this.onDefinitionChange} value={this.state.definitionURL} />
+					<input className="form-control" onChange={this.onDefinitionChange} value={this.state.definitionURL} />
+					<input className="form-control" onChange={this.onTriggerChange} value={this.state.triggerURL} />
 					<TCompForm
 						componentId="demo"
 						uiSpecPath="ui"
