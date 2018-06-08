@@ -3,10 +3,10 @@ import omit from 'lodash/omit';
 import * as components from '@talend/react-components';
 import * as containers from './index';
 
-export function registerAllContainers() {
+export function registerAllContainers(extra) {
 	const onlyReactComponent = omit(containers, ['actionAPI']);
 	cmf.component.registerMany(onlyReactComponent);
-
+	cmf.component.registerMany(extra);
 	const alreadyRegistered = Object.keys(onlyReactComponent);
 
 	Object.keys(omit(components, alreadyRegistered)).forEach(key => {

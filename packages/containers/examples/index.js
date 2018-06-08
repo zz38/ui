@@ -22,7 +22,10 @@ import SubHeaderBarExample from './ExampleSubHeaderBar';
 import TabBarExample from './ExampleTabBar';
 import TypeaheadExample from './ExampleTypeahead';
 
+import TCompFormExample from './ExampleTCompForm';
+
 export default {
+	TCompFormExample,
 	ActionExample,
 	ActionBarExample,
 	ActionDropdown,

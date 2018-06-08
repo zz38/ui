@@ -15,10 +15,11 @@ import {
 	actionsCreators as actionsCreatorsSubHeader,
 } from './subheaderbar.storybook';
 import { registerAllContainers } from '../src/register';
+import TCompForm from '../src/TCompForm';
 
 setAddon({ addWithCMF: cmf.addWithCMF });
 
-registerAllContainers();
+registerAllContainers({TCompForm});
 const actionLogger = action('dispatch');
 const sagaMiddleware = createSagaMiddleware();
 

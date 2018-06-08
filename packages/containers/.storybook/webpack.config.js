@@ -7,4 +7,8 @@
 // to "React Create App". This only has babel loader to load JavaScript.
 const commonConfiguration = require('../../../.storybook/webpack.config');
 
-module.exports = storybookBaseConfig => commonConfiguration(storybookBaseConfig);
+module.exports = storybookBaseConfig => {
+    const config = commonConfiguration(storybookBaseConfig);
+    console.log(config)
+    return config;
+}
