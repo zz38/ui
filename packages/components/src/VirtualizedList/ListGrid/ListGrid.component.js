@@ -3,6 +3,7 @@ import React from 'react';
 import { List as VirtualizedList } from 'react-virtualized';
 
 import getRowSelectionRenderer from '../RowSelection';
+import getRowFocus from '../RowFocus';
 
 import theme from './ListGrid.scss';
 import { decorateRowClick, decorateRowDoubleClick } from '../event/rowclick';
@@ -19,10 +20,14 @@ function ListGrid(props) {
 		onRowClick,
 		onRowDoubleClick,
 		rowRenderer,
+		selectCell,
 		...restProps
 	} = props;
 
-	let enhancedRowRenderer = rowRenderer;
+	let enhancedRowRenderer = getRowFocus(rowRenderer, {
+		focusOnRow: restProps.scrollToIndex,
+		selectCell,
+	});
 	if (isActive || isSelected) {
 		enhancedRowRenderer = getRowSelectionRenderer(rowRenderer, {
 			isActive,

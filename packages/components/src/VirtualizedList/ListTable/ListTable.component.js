@@ -5,13 +5,21 @@ import {
 	Table as VirtualizedTable,
 	defaultTableRowRenderer as DefaultTableRowRenderer,
 } from 'react-virtualized';
+import memoizeOne from 'memoize-one';
+import isEqual from 'lodash/isEqual';
 
 import getRowSelectionRenderer from '../RowSelection';
+import getRowFocus from '../RowFocus';
+
 import { DROPDOWN_CONTAINER_CN } from '../../Actions/ActionDropdown';
 import { decorateRowClick, decorateRowDoubleClick } from '../event/rowclick';
 
 import theme from './ListTable.scss';
 import rowThemes from './RowThemes';
+
+const getMemoizedRowFocus = memoizeOne(getRowFocus, isEqual);
+const getMemoizedRowSelectionRenderer = memoizeOne(getRowSelectionRenderer, isEqual);
+const getRowData = rowProps => rowProps.rowData;
 
 /**
  * List renderer that renders a react-virtualized Table
@@ -24,15 +32,19 @@ function ListTable(props) {
 		isSelected,
 		onRowClick,
 		onRowDoubleClick,
+		selectCell,
 		...restProps
 	} = props;
 
-	let RowTableRenderer = DefaultTableRowRenderer;
+	let RowTableRenderer = getMemoizedRowFocus(DefaultTableRowRenderer, {
+		focusOnRow: restProps.scrollToIndex,
+		selectCell,
+	});
 	if (isActive || isSelected) {
-		RowTableRenderer = getRowSelectionRenderer(RowTableRenderer, {
+		RowTableRenderer = getMemoizedRowSelectionRenderer(RowTableRenderer, {
 			isSelected,
 			isActive,
-			getRowData: rowProps => rowProps.rowData,
+			getRowData,
 		});
 	}
 

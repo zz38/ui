@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { ArrowKeyStepper } from 'react-virtualized';
 
 import { listTypes } from './utils/constants';
 import { rowDictionary } from './utils/dictionary';
@@ -33,7 +34,13 @@ function getRowRenderer(type) {
 class RendererSelector extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {};
+		this.selectCell = this.selectCell.bind(this);
 		this.noRowsRenderer = this.noRowsRenderer.bind(this);
+	}
+
+	selectCell(nextState) {
+		this.setState(nextState);
 	}
 
 	noRowsRenderer() {
@@ -95,7 +102,28 @@ class RendererSelector extends React.Component {
 			customProps = { rowRenderer: getRowRenderer(type) };
 		}
 
-		return <ListRenderer {...commonProps} {...customProps} />;
+		return (
+			<div>
+				Selected {this.state.scrollToRow}
+				<ArrowKeyStepper
+					columnCount={1}
+					rowCount={collection.length}
+					mode="cells"
+					onScrollToChange={this.selectCell}
+					scrollToRow={this.state.scrollToRow}
+				>
+					{({ onSectionRendered, scrollToRow }) => (
+						<ListRenderer
+							{...commonProps}
+							{...customProps}
+							onRowsRendered={onSectionRendered}
+							scrollToIndex={scrollToRow}
+							selectCell={this.selectCell}
+						/>
+					)}
+				</ArrowKeyStepper>
+			</div>
+		);
 	}
 }
 RendererSelector.displayName = 'VirtualizedList(RendererSelector)';
