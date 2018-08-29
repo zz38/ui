@@ -12,6 +12,9 @@ module.exports = function start(env) {
 			'--content-base', 'build/',
 			'--open',
 			'--progress',
+			'--colors',
+			'--display-error-details',
+			'--display-chunks',
 		],
 		{ stdio: 'inherit', env }
 	);
