@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { action } from '@storybook/addon-actions';
 import { UIForm } from '../src/UIForm';
+import ModalCodeField from '../src/UIForm/fields/Code/ModalCodeField.component';
 
 function CustomWidget(props) {
 	const { value } = props;
@@ -23,13 +24,20 @@ CustomWidget.propTypes = {
 	value: PropTypes.string,
 };
 
+function InjectModalRoot() {
+	return <div id="modal-root" />;
+}
+
 function story() {
-	const widgets = { custom: CustomWidget };
+	const widgets = { custom: CustomWidget, code: ModalCodeField };
 	const schema = {
 		jsonSchema: {
 			title: 'Unknown widget',
 			type: 'object',
 			properties: {
+				codeWidgetModal: {
+					type: 'string',
+				},
 				list: {
 					type: 'string',
 					enum: ['one', 'two', 'three'],
@@ -38,9 +46,20 @@ function story() {
 			},
 		},
 		properties: {
+			codeWidgetModal: '#hello comment',
 			list: 'two',
 		},
 		uiSchema: [
+			{
+				key: 'codeWidgetModal',
+				widget: 'code',
+				description: "This widget with custom prop 'height: 100px'",
+				title: 'Code small',
+				options: {
+					language: 'python',
+					height: '100px',
+				},
+			},
 			{
 				key: 'list',
 				type: 'custom',
@@ -48,12 +67,15 @@ function story() {
 		],
 	};
 	return (
-		<UIForm
-			widgets={widgets}
-			data={schema}
-			onChange={action('Change')}
-			onSubmit={action('onSubmit')}
-		/>
+		<div>
+			<InjectModalRoot />
+			<UIForm
+				widgets={widgets}
+				data={schema}
+				onChange={action('Change')}
+				onSubmit={action('onSubmit')}
+			/>
+		</div>
 	);
 }
 
